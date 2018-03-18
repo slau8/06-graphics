@@ -14,4 +14,4 @@ transform = new_matrix()
 # print_matrix( make_hermite() )
 # print
 
-parse_file( 'script', edges, transform, screen, color )
+parse_file( 'basketball', edges, transform, screen, color )

@@ -8,32 +8,32 @@ The file follows the following format:
      Every command is a single character that takes up a line
      Any command that requires arguments must have those arguments in the second line.
      The commands are as follows:
-         sphere: add a sphere to the edge matrix - 
+         sphere: add a sphere to the edge matrix -
 	    takes 4 arguemnts (cx, cy, cz, r)
-         torus: add a torus to the edge matrix - 
+         torus: add a torus to the edge matrix -
 	    takes 5 arguemnts (cx, cy, cz, r1, r2)
-         box: add a rectangular prism to the edge matrix - 
-	    takes 6 arguemnts (x, y, z, width, height, depth)	    
+         box: add a rectangular prism to the edge matrix -
+	    takes 6 arguemnts (x, y, z, width, height, depth)
 
-	 circle: add a circle to the edge matrix - 
+	 circle: add a circle to the edge matrix -
 	    takes 3 arguments (cx, cy, r)
 	 hermite: add a hermite curve to the edge matrix -
 	    takes 8 arguments (x0, y0, x1, y1, rx0, ry0, rx1, ry1)
 	 bezier: add a bezier curve to the edge matrix -
 	    takes 8 arguments (x0, y0, x1, y1, x2, y2, x3, y3)
-         line: add a line to the edge matrix - 
+         line: add a line to the edge matrix -
 	    takes 6 arguemnts (x0, y0, z0, x1, y1, z1)
-	 ident: set the transform matrix to the identity matrix - 
-	 scale: create a scale matrix, 
-	    then multiply the transform matrix by the scale matrix - 
+	 ident: set the transform matrix to the identity matrix -
+	 scale: create a scale matrix,
+	    then multiply the transform matrix by the scale matrix -
 	    takes 3 arguments (sx, sy, sz)
-	 move: create a translation matrix, 
-	    then multiply the transform matrix by the translation matrix - 
+	 move: create a translation matrix,
+	    then multiply the transform matrix by the translation matrix -
 	    takes 3 arguments (tx, ty, tz)
 	 rotate: create a rotation matrix,
 	    then multiply the transform matrix by the rotation matrix -
 	    takes 2 arguments (axis, theta) axis should be x, y or z
-	 apply: apply the current transformation matrix to the 
+	 apply: apply the current transformation matrix to the
 	    edge matrix
 	 display: draw the lines of the edge matrix to the screen
 	    display the screen
@@ -44,7 +44,7 @@ The file follows the following format:
 
 See the file script for an example of the file format
 """
-ARG_COMMANDS = [ 'line', 'scale', 'move', 'rotate', 'save', 'circle', 'bezier', 'hermite' ]
+ARG_COMMANDS = [ 'line', 'scale', 'move', 'rotate', 'save', 'circle', 'bezier', 'hermite', 'sphere', 'torus', 'box' ]
 
 def parse_file( fname, edges, transform, screen, color ):
 
@@ -74,9 +74,21 @@ def parse_file( fname, edges, transform, screen, color ):
                       float(args[2]), float(args[3]),
                       float(args[4]), float(args[5]),
                       float(args[6]), float(args[7]),
-                      step, line)                      
-            
-        elif line == 'line':            
+                      step, line)
+
+        elif line == 'box':
+            add_box(edges,
+                  float(args[0]), float(args[1]),
+                  float(args[2]), float(args[3]),
+                  float(args[4]), float(args[5]))
+
+        elif line == 'sphere':
+            add_sphere(edges, float(args[0]), float(args[1]), float(args[2]), float(args[3]), step)
+
+        elif line == 'torus':
+            add_torus(edges, float(args[0]), float(args[1]), float(args[2]), float(args[3]), float(args[4]), step)
+
+        elif line == 'line':
             #print 'LINE\t' + str(args)
 
             add_edge( edges,
@@ -96,7 +108,7 @@ def parse_file( fname, edges, transform, screen, color ):
         elif line == 'rotate':
             #print 'ROTATE\t' + str(args)
             theta = float(args[1]) * (math.pi / 180)
-            
+
             if args[0] == 'x':
                 t = make_rotX(theta)
             elif args[0] == 'y':
@@ -104,7 +116,7 @@ def parse_file( fname, edges, transform, screen, color ):
             else:
                 t = make_rotZ(theta)
             matrix_mult(t, transform)
-                
+
         elif line == 'ident':
             ident(transform)
 
@@ -119,5 +131,5 @@ def parse_file( fname, edges, transform, screen, color ):
                 display(screen)
             else:
                 save_extension(screen, args[0])
-            
+
         c+= 1

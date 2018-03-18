@@ -1,0 +1,25 @@
+box
+-100 100 0 200 100 20
+box
+-99 99 0 200 100 20
+box
+-101 101 0 200 100 20
+box
+-99 101 0 200 100 20
+box
+-101 99 0 200 100 20
+torus
+0 0 25 5 50
+ident
+rotate
+x 20
+rotate
+y -45
+move
+350 350 0
+apply
+sphere
+150 150 0 40
+display
+save
+basketball.png
